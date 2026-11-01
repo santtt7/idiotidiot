@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>你最适合的职业鉴定</title>
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: "Microsoft YaHei", sans-serif; }
+    body { background-color: #f0f2f5; color: #333; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+    .container { background-color: #fff; width: 100%; max-width: 450px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); overflow: hidden; }
+    .header { background: #1890ff; color: white; padding: 25px 20px; text-align: center; font-size: 22px; font-weight: bold; letter-spacing: 1px; }
+    .sub-header { text-align: center; color: #888; font-size: 14px; margin-top: -10px; margin-bottom: 20px; }
+    .content { padding: 30px 25px; }
+    .hidden { display: none !important; }
+    .btn { display: block; width: 100%; padding: 15px; background: #1890ff; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; transition: 0.3s; margin-top: 25px; font-weight: bold; box-shadow: 0 4px 10px rgba(24,144,255,0.3); }
+    .btn:hover { background: #096dd9; }
+    .btn:active { transform: scale(0.98); }
+    .option { display: block; width: 100%; padding: 16px; background: #fafafa; border: 1px solid #e8e8e8; border-radius: 8px; margin-bottom: 12px; cursor: pointer; text-align: left; transition: 0.2s; font-size: 15px; line-height: 1.5; color: #555; }
+    .option:hover { background: #e6f7ff; border-color: #1890ff; color: #1890ff; }
+    .question-title { font-size: 18px; margin-bottom: 25px; font-weight: bold; line-height: 1.5; color: #333; }
+    .progress-bar { height: 6px; background: #e8e8e8; border-radius: 3px; margin-bottom: 20px; overflow: hidden; }
+    .progress-inner { height: 100%; background: #1890ff; width: 0%; transition: width 0.3s ease; }
+    
+    /* 恶搞结果页面特效 */
+    .prank-box { text-align: center; animation: shake 0.5s ease-in-out; }
+    .prank-emoji { font-size: 80px; margin-bottom: 20px; display: inline-block; animation: bounce 1s infinite; }
+    .prank-text { font-size: 36px; font-weight: 900; color: #ff4d4f; margin-bottom: 15px; text-shadow: 2px 2px 0 #ffd8d8; }
+    .prank-sub { font-size: 16px; color: #666; margin-bottom: 30px; line-height: 1.6; }
+
+    @keyframes shake {
+        0% { transform: translateX(0); }
+        25% { transform: translateX(-10px); }
+        50% { transform: translateX(10px); }
+        75% { transform: translateX(-10px); }
+        100% { transform: translateX(0); }
+    }
+    @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-20px); }
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">你最适合的职业鉴定</div>
+    <div class="content">
+        
+        <!-- 首页 -->
+        <div id="start-screen">
+            <div class="sub-header">基于百万大数据与心理学模型分析</div>
+            <p style="text-align: center; line-height: 1.8; margin-bottom: 20px; color: #666; font-size: 15px;">
+                通过 3 道潜意识情境测试，精准挖掘你隐藏的天赋，为你推荐最匹配的终身职业。
+            </p>
+            <button class="btn" onclick="startQuiz()">开始鉴定</button>
+        </div>
+
+        <!-- 答题页 -->
+        <div id="quiz-screen" class="hidden">
+            <div class="progress-bar"><div class="progress-inner" id="progress-inner"></div></div>
+            <div class="question-title" id="question-text">题目加载中...</div>
+            <div id="options-container"></div>
+        </div>
+
+        <!-- 恶搞结果页 -->
+        <div id="result-screen" class="hidden">
+            <div class="prank-box">
+                <div class="prank-emoji">🤪</div>
+                <div class="prank-text">你是个大笨蛋！</div>
+                <div class="prank-sub">
+                    鉴定完毕，你最适合的职业是：<br><b>被整蛊对象</b>。<br><br>
+                    哈哈，这么正经的测试你都信？<br>赶紧去群里发个红包补偿一下你的智商税！
+                </div>
+                <button class="btn" style="background: #52c41a; box-shadow: 0 4px 10px rgba(82,196,26,0.3);" onclick="location.reload()">我不信，再测一次</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    const questions = [
+        {
+            q: "1. 周末去超市购物，你通常会？",
+            options: [
+                "A. 提前列好清单，严格按照清单购买",
+                "B. 随便逛逛，看到什么顺眼就买什么",
+                "C. 直奔目标，买完立刻走人"
+            ]
+        },
+        {
+            q: "2. 团队合作时，你更倾向于扮演什么角色？",
+            options: [
+                "A. 统筹全局的领导者，分配任务",
+                "B. 提供创意的智囊团，出谋划策",
+                "C. 默默干活的执行者，任劳任怨"
+            ]
+        },
+        {
+            q: "3. 当你面对巨大的工作压力时，你会？",
+            options: [
+                "A. 迎难而上，加班加点解决问题",
+                "B. 先摸个鱼，调整好心态再面对",
+                "C. 找朋友吐槽，寻求安慰和支持"
+            ]
+        }
+    ];
+
+    let currentQuestion = 0;
+
+    function startQuiz() {
+        document.getElementById('start-screen').classList.add('hidden');
+        document.getElementById('quiz-screen').classList.remove('hidden');
+        showQuestion();
+    }
+
+function showQuestion() {
+        if (currentQuestion >= questions.length) {
+            showResult();
+            return;
+        }
+
+        const qData = questions[currentQuestion];
+        document.getElementById('progress-inner').style.width = ((currentQuestion) / questions.length) * 100 + '%';
+        document.getElementById('question-text').innerText = qData.q;
+
+        const optionsContainer = document.getElementById('options-container');
+        optionsContainer.innerHTML = '';
+
+        qData.options.forEach(optText => {
+            const btn = document.createElement('button');
+            btn.className = 'option';
+            btn.innerText = optText;
+            // 无论选什么，都直接进入下一题
+            btn.onclick = () => {
+                currentQuestion++;
+                showQuestion();
+            };
+            optionsContainer.appendChild(btn);
+        });
+    }
+
+    function showResult() {
+        // 进度条拉满
+        document.getElementById('progress-inner').style.width = '100%';
+        // 假装在努力计算（增加恶搞效果）
+        document.getElementById('question-text').innerText = "正在分析你的大脑数据...";
+        document.getElementById('options-container').innerHTML = '<p style="text-align:center; color:#1890ff; font-weight:bold;">请稍候...</p>';
+        
+        // 延迟 1.5 秒后弹出恶搞结果，让用户以为真的在计算
+        setTimeout(() => {
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+        }, 1500);
+    }
+</script>
+
+</body>
+</html>
